@@ -36,6 +36,10 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun PhiloQuizApp(repository: QuestionRepository) {
     var selectedQuestion by remember { mutableStateOf<Question?>(null) }
+    var selectedSectionId by remember { mutableStateOf<Int?>(null) }
+    var searchQuery by remember { mutableStateOf("") }
+
+    val sections = remember { repository.getSections() }
     var questions by remember { mutableStateOf(repository.loadQuestions()) }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -47,9 +51,16 @@ fun PhiloQuizApp(repository: QuestionRepository) {
         } else {
             QuestionListScreen(
                 questions = questions,
+                sections = sections,
+                selectedSectionId = selectedSectionId,
+                onSectionSelect = { sectionId ->
+                    selectedSectionId = sectionId
+                    questions = repository.search(searchQuery, sectionId)
+                },
                 onQuestionClick = { selectedQuestion = it },
                 onSearch = { query ->
-                    questions = repository.search(query)
+                    searchQuery = query
+                    questions = repository.search(query, selectedSectionId)
                 },
                 modifier = Modifier.padding(innerPadding)
             )

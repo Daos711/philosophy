@@ -21,7 +21,7 @@ fun QuestionDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(question.category) },
+                title = { Text("Р${question.sectionId} • №${question.number}") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
@@ -40,6 +40,15 @@ fun QuestionDetailScreen(
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
+            // Раздел
+            Text(
+                text = question.section,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             // Вопрос
             Card(
                 modifier = Modifier.fillMaxWidth(),
@@ -49,7 +58,7 @@ fun QuestionDetailScreen(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Вопрос",
+                        text = "Вопрос №${question.number}",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
                     )

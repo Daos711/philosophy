@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.philoquiz.data.Question
 
@@ -17,6 +18,9 @@ import com.example.philoquiz.data.Question
 @Composable
 fun QuestionListScreen(
     questions: List<Question>,
+    sections: List<Pair<Int, String>>,
+    selectedSectionId: Int?,
+    onSectionSelect: (Int?) -> Unit,
     onQuestionClick: (Question) -> Unit,
     onSearch: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -33,11 +37,49 @@ fun QuestionListScreen(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            placeholder = { Text("Поиск по вопросам...") },
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            placeholder = { Text("Поиск (номер или текст)...") },
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Поиск") },
             singleLine = true
         )
+
+        // Вкладки разделов
+        ScrollableTabRow(
+            selectedTabIndex = if (selectedSectionId == null) 0 else sections.indexOfFirst { it.first == selectedSectionId } + 1,
+            modifier = Modifier.fillMaxWidth(),
+            edgePadding = 8.dp
+        ) {
+            Tab(
+                selected = selectedSectionId == null,
+                onClick = { onSectionSelect(null) },
+                text = { Text("Все", maxLines = 1) }
+            )
+            sections.forEach { (id, title) ->
+                Tab(
+                    selected = selectedSectionId == id,
+                    onClick = { onSectionSelect(id) },
+                    text = {
+                        Text(
+                            "Р$id",
+                            maxLines = 1
+                        )
+                    }
+                )
+            }
+        }
+
+        // Название выбранного раздела
+        if (selectedSectionId != null) {
+            val sectionTitle = sections.find { it.first == selectedSectionId }?.second ?: ""
+            Text(
+                text = sectionTitle,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
 
         // Список вопросов
         LazyColumn(
@@ -71,16 +113,29 @@ fun QuestionItem(
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            Text(
-                text = question.category,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Р${question.sectionId}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = "№${question.number}",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = question.question,
                 style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
