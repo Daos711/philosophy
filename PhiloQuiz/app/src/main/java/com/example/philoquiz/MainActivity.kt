@@ -53,6 +53,7 @@ fun PhiloQuizApp(repository: QuestionRepository) {
                 questions = questions,
                 sections = sections,
                 selectedSectionId = selectedSectionId,
+                searchQuery = searchQuery,
                 onSectionSelect = { sectionId ->
                     selectedSectionId = sectionId
                     questions = repository.search(searchQuery, sectionId)

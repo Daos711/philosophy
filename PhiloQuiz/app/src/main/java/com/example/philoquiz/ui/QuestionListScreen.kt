@@ -21,21 +21,17 @@ fun QuestionListScreen(
     questions: List<Question>,
     sections: List<Pair<Int, String>>,
     selectedSectionId: Int?,
+    searchQuery: String,
     onSectionSelect: (Int?) -> Unit,
     onQuestionClick: (Question) -> Unit,
     onSearch: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var searchQuery by remember { mutableStateOf("") }
-
     Column(modifier = modifier.fillMaxSize()) {
         // Поиск
         OutlinedTextField(
             value = searchQuery,
-            onValueChange = {
-                searchQuery = it
-                onSearch(it)
-            },
+            onValueChange = { onSearch(it) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -43,10 +39,7 @@ fun QuestionListScreen(
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Поиск") },
             trailingIcon = {
                 if (searchQuery.isNotEmpty()) {
-                    IconButton(onClick = {
-                        searchQuery = ""
-                        onSearch("")
-                    }) {
+                    IconButton(onClick = { onSearch("") }) {
                         Icon(Icons.Default.Clear, contentDescription = "Очистить")
                     }
                 }
