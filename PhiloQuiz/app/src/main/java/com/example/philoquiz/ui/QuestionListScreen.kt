@@ -22,49 +22,27 @@ fun QuestionListScreen(
     modifier: Modifier = Modifier
 ) {
     var searchQuery by remember { mutableStateOf("") }
-    var isSearchActive by remember { mutableStateOf(false) }
 
     Column(modifier = modifier.fillMaxSize()) {
         // Поиск
-        SearchBar(
-            query = searchQuery,
-            onQueryChange = {
+        OutlinedTextField(
+            value = searchQuery,
+            onValueChange = {
                 searchQuery = it
                 onSearch(it)
             },
-            onSearch = { onSearch(searchQuery) },
-            active = isSearchActive,
-            onActiveChange = { isSearchActive = it },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = if (isSearchActive) 0.dp else 16.dp),
+                .padding(16.dp),
             placeholder = { Text("Поиск по вопросам...") },
-            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Поиск") }
-        ) {
-            // Результаты поиска внутри SearchBar
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(questions) { question ->
-                    QuestionItem(
-                        question = question,
-                        onClick = {
-                            isSearchActive = false
-                            onQuestionClick(question)
-                        }
-                    )
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Поиск") },
+            singleLine = true
+        )
 
         // Список вопросов
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(questions) { question ->

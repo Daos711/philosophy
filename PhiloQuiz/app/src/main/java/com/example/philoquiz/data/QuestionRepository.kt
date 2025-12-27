@@ -18,14 +18,6 @@ class QuestionRepository(private val context: Context) {
         return questions
     }
 
-    fun getCategories(): List<String> {
-        return loadQuestions().map { it.category }.distinct()
-    }
-
-    fun getByCategory(category: String): List<Question> {
-        return loadQuestions().filter { it.category == category }
-    }
-
     fun search(query: String): List<Question> {
         val q = query.lowercase().trim()
         if (q.isEmpty()) return loadQuestions()
@@ -35,9 +27,5 @@ class QuestionRepository(private val context: Context) {
             question.answer.lowercase().contains(q) ||
             question.keywords.any { it.lowercase().contains(q) }
         }
-    }
-
-    fun getById(id: Int): Question? {
-        return loadQuestions().find { it.id == id }
     }
 }
