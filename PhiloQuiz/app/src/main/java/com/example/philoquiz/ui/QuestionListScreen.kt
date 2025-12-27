@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -40,6 +41,16 @@ fun QuestionListScreen(
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             placeholder = { Text("Поиск (номер или текст)...") },
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Поиск") },
+            trailingIcon = {
+                if (searchQuery.isNotEmpty()) {
+                    IconButton(onClick = {
+                        searchQuery = ""
+                        onSearch("")
+                    }) {
+                        Icon(Icons.Default.Clear, contentDescription = "Очистить")
+                    }
+                }
+            },
             singleLine = true
         )
 
