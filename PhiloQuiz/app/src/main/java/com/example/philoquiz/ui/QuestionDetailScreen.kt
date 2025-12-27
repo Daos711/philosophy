@@ -10,12 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.philoquiz.data.Question
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuestionDetailScreen(
     question: Question,
+    fontSize: Int,
     onBack: () -> Unit
 ) {
     Scaffold(
@@ -65,7 +67,7 @@ fun QuestionDetailScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = question.question,
-                        style = MaterialTheme.typography.titleMedium,
+                        fontSize = (fontSize + 2).sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
@@ -90,8 +92,9 @@ fun QuestionDetailScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = parseMarkdownBold(question.answer),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        fontSize = fontSize.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        lineHeight = (fontSize * 1.5).sp
                     )
                 }
             }
