@@ -89,7 +89,7 @@ fun QuestionDetailScreen(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = question.answer,
+                        text = parseMarkdownBold(question.answer),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
